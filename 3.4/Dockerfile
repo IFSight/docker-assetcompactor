@@ -1,5 +1,14 @@
-FROM alpine:3.4
+FROM fulcrum/alpine
 MAINTAINER IF Fulcrum "fulcrum@ifsight.net"
 
-RUN echo "Cache bust 201606232004" && \
-    apk update && apk upgrade
+RUN apk update && apk upgrade && \
+    wget "s3.amazonaws.com/aws-cli/awscli-bundle.zip" -O "awscli-bundle.zip" && \
+    unzip awscli-bundle.zip && \
+    apk add --update groff less pigz python tar && \
+    rm /var/cache/apk/* && \
+    ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws && \
+    rm awscli-bundle.zip && \
+    rm -rf awscli-bundle
+
+ADD bacon /usr/local/bin/bacon
+ADD assetcompactor /usr/local/bin/assetcompactor
