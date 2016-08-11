@@ -28,19 +28,26 @@ PIGZ=/usr/local/bin/bacon
 echo "[$(date)] Starting asset archive of ${SRCDIR} -> ${S3DST}${FSDST}"
 
 # change to the directory so that it is 
-cd "${SRCPATH}" &&
+cd "${SRCPATH}"
 
 # make rw-r----
-umask 0027 &&
+umask 0027
 
 # specify the compress program as a wrapper for pigz so that we can control the number of threads
-tar --use-compress-program=$PIGZ -cf "${FSDST}" "${SRCDIR}" &&
+tar --use-compress-program=$PIGZ -cf "${FSDST}" "${SRCDIR}"
+TAREXIT=$?
+
+# see if tar had a bad exit
+if [ "$TAREXIT" -gt 1 ]; then
+	echo "tar had an error ($TAREXIT)"
+	exit $TAREXIT
+fi
 
 # send up to S3
-$AWSCMD s3 cp --storage-class=STANDARD_IA "${FSDST}" "${S3DST}" &&
+$AWSCMD s3 cp --storage-class=STANDARD_IA "${FSDST}" "${S3DST}"
 
 # remove locally
-rm ${FSDST} &&
+rm ${FSDST}
 
 # log finished
 echo "[$(date)] Finished asset archive of ${SRCDIR}"
