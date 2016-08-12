@@ -3,23 +3,34 @@
 # asset compactor wrapper
 
 if [ -z $1 ]; then
-  echo "Directory not provided"
+  echo "Asset directory not provided"
   exit 1
 fi
 
-if [ -z $2 ]; then
-  echo "S3 bucket/path not provided"
-  exit 1
-fi
-
-if [ ! -d $1 ]; then
+if [ ! -d "$1" ]; then
   echo "Not a directory: $1"
   exit 1
 fi
 
-sudo docker run                                                        \
-  --detach=false                                                       \
-  --rm                                                                 \
-  --volume="${1}":"/assetcompactordata/$(basename ${1})"               \
-  --volume=/etc/aws/assetcompactor:/root/.aws                          \
-  fulcrum/assetcompactor "/assetcompactordata/$(basename ${1})" "${2}"
+if [ -z $2 ]; then
+  echo "Work directory not provided"
+  exit 1
+fi
+
+if [ ! -d "$2" ]; then
+  echo "Not a directory: $2"
+  exit 1
+fi
+
+if [ -z $3 ]; then
+  echo "S3 bucket/path not provided"
+  exit 1
+fi
+
+sudo docker run                                             \
+  --detach=false                                            \
+  --rm                                                      \
+  --volume="${2}":/datadir/                                 \
+  --volume="${1}":"/datadir/$(basename ${1})"               \
+  --volume=/etc/aws/assetcompactor:/root/.aws               \
+  fulcrum/assetcompactor "/datadir/$(basename ${1})" "${3}"
