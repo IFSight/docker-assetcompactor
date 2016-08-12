@@ -46,7 +46,7 @@ if [ "$TAREXIT" -gt 1 ]; then
 fi
 
 # send up to S3
-$AWSCMD s3 cp --storage-class=STANDARD_IA "${FSDST}" "${S3DST}"
+$AWSCMD s3 cp --content-disposition="attachment; filename=\"${FSDST}\"" --storage-class=STANDARD_IA "${FSDST}" "${S3DST}"
 
 TARSIZE=$(du -h "${FSDST}" | cut -f1)
 
