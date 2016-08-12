@@ -27,10 +27,17 @@ if [ -z $3 ]; then
   exit 1
 fi
 
-sudo docker run                                             \
-  --detach=false                                            \
-  --rm                                                      \
-  --volume="${2}":/datadir/                                 \
-  --volume="${1}":"/datadir/$(basename ${1})"               \
-  --volume=/etc/aws/assetcompactor:/root/.aws               \
-  fulcrum/assetcompactor "/datadir/$(basename ${1})" "${3}"
+DIR="$(basename ${1})"
+
+# make sure the directory exist first
+sudo mkdir -p /var/log/assetcompactor
+
+# run in docker, append to all and specific log files, silence output for cron reasons
+sudo docker run                                                                \
+  --detach=false                                                               \
+  --rm                                                                         \
+  --volume="${2}":/datadir/                                                    \
+  --volume="${1}":"/datadir/${DIR}"                                            \
+  --volume=/etc/aws/assetcompactor:/root/.aws                                  \
+  fulcrum/assetcompactor "/datadir/${DIR}" "${3}"                              |
+sudo tee -a /var/log/assetcompactor/all.log /var/log/assetcompactor/${DIR}.log > /dev/null
