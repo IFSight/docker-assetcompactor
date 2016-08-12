@@ -2,6 +2,8 @@
 
 # tar up the files in parallel of a site, e.g. www.site.net -> www_site_net-assets-2-Tue.tar.gz
 
+START=$(date +%s)
+
 if [ -z $1 ]; then
   echo "Directory not provided"
   exit 1
@@ -50,4 +52,4 @@ $AWSCMD s3 cp --storage-class=STANDARD_IA "${FSDST}" "${S3DST}"
 rm ${FSDST}
 
 # log finished
-echo "[$(date)] Finished asset archive of ${SRCDIR}"
+echo "[$(date)] Finished asset archive of ${SRCDIR} in $(($(date +%s)-$START)) seconds"
