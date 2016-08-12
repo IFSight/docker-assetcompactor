@@ -12,3 +12,5 @@ RUN apk update && apk upgrade && \
 
 ADD bacon /usr/local/bin/bacon
 ADD assetcompactor /usr/local/bin/assetcompactor
+
+ENTRYPOINT ["/usr/local/bin/assetcompactor"]
