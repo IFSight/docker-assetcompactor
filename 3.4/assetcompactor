@@ -27,7 +27,7 @@ AWSCMD=/usr/local/bin/aws
 PIGZ=/usr/local/bin/bacon
 
 # log starting
-echo "[$(date)] Starting asset archive of ${SRCDIR} -> ${S3DST}${FSDST}"
+echo "[$(date)] ${SRCDIR}: starting archive asset archive of ${SRCDIR} -> ${S3DST}${FSDST}"
 
 # change to the directory so that it is 
 cd "${SRCPATH}"
@@ -45,8 +45,10 @@ if [ "$TAREXIT" -gt 1 ]; then
 	exit $TAREXIT
 fi
 
+echo "[$(date)] ${SRCDIR}: copying to ${S3DST}${FSDST}"
+
 # send up to S3
-$AWSCMD s3 cp --content-disposition="attachment; filename=\"${FSDST}\"" --storage-class=STANDARD_IA "${FSDST}" "${S3DST}"
+$AWSCMD s3 cp --quiet --content-disposition="attachment; filename=\"${FSDST}\"" --storage-class=STANDARD_IA "${FSDST}" "${S3DST}"
 
 TARSIZE=$(du -h "${FSDST}" | cut -f1)
 
@@ -54,4 +56,4 @@ TARSIZE=$(du -h "${FSDST}" | cut -f1)
 rm ${FSDST}
 
 # log finished
-echo "[$(date)] Finished asset archive of ${SRCDIR} (size ${TARSIZE}) in $(($(date +%s)-$START)) seconds"
+echo "[$(date)] ${SRCDIR}: finished, size ${TARSIZE}) in $(($(date +%s)-$START)) seconds"
