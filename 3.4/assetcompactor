@@ -27,7 +27,7 @@ AWSCMD=/usr/local/bin/aws
 PIGZ=/usr/local/bin/bacon
 
 # log starting
-echo "[$(date)] ${SRCDIR}: starting archive asset archive of ${SRCDIR} -> ${S3DST}${FSDST}"
+echo "[$(date)] ${SRCDIR}: starting asset archive of ${SRCDIR} -> ${S3DST}${FSDST}"
 
 # change to the directory so that it is 
 cd "${SRCPATH}"
