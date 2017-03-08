@@ -50,6 +50,14 @@ echo "[$(date)] ${SRCDIR}: copying to ${S3DST}${FSDST}"
 # send up to S3
 $AWSCMD s3 cp --quiet --content-disposition="attachment; filename=\"${FSDST}\"" --sse=AES256 --storage-class=STANDARD_IA "${FSDST}" "${S3DST}"
 
+# secondary standard storage, possibly transfered to cold
+if [ ! -z "$3" ]; then
+  FSSECDST="$(echo "$SRCDIR" | sed 's/\./_/g')-assets-$(date '+%Y%m%d%H%M%S').tar.gz"
+  S3SECDST="s3://$3/assets/${SRCDIR}/$FSSECDST"
+
+  $AWSCMD s3 cp --quiet --content-disposition="attachment; filename=\"${FSSECDST}\"" --sse=AES256 --storage-class=STANDARD "${FSDST}" "${S3SECDST}"
+fi
+
 TARSIZE=$(du -h "${FSDST}" | cut -f1)
 
 # remove locally
