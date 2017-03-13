@@ -57,7 +57,7 @@ if [ ! -z "$3" ]; then
 
   echo "[$(date)] ${SRCDIR}: secondary backup of to ${FSDST} ${S3SECDST}"
 
-  $AWSCMD s3 cp --quiet --content-disposition="attachment; filename=\"${FSSECDST}\"" --sse=AES256 --storage-class=STANDARD "${FSDST}" "${S3SECDST}"
+  $AWSCMD s3 cp --content-disposition="attachment; filename=\"${FSSECDST}\"" --sse=AES256 --storage-class=STANDARD "${FSDST}" "${S3SECDST}"
 fi
 
 TARSIZE=$(du -h "${FSDST}" | cut -f1)
