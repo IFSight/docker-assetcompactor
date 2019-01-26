@@ -1,4 +1,4 @@
 #!/bin/sh
 
-#exec /usr/bin/pigz -p 8 "$@"
-exec /usr/bin/pigz "$@"
+exec /usr/bin/pigz -p 8 "$@"
+#exec /usr/bin/pigz "$@"
