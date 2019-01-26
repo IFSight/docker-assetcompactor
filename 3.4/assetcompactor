@@ -48,7 +48,7 @@ fi
 echo "[$(date)] ${SRCDIR}: copying to ${S3DST}${FSDST}"
 
 # send up to S3
-$AWSCMD s3 cp --quiet --content-disposition="attachment; filename=\"${FSDST}\"" --sse=AES256 --storage-class=STANDARD_IA "${FSDST}" "${S3DST}"
+$AWSCMD s3 cp --quiet --content-disposition="attachment; filename=\"${FSDST}\"" --sse=AES256 --storage-class=STANDARD "${FSDST}" "${S3DST}"
 
 # secondary standard storage, possibly transfered to cold
 if [ ! -z "$3" ]; then
